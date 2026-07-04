@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block title %}Create Event — EventPass{% endblock %}
+{% block content %}
+<div class="page-narrow">
+  <div class="glass-card">
+    <div class="form-title">Create New Event</div>
+    <div class="form-subtitle">Set up the event, then add date/time sessions.</div>
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ form.title }}
+      {{ form.description }}
+      {{ form.venue }}
+      <label>Event Banner (optional)</label>
+      {{ form.banner }}
+      <button type="submit" class="btn btn-primary">Create Event</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

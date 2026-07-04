@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}Sign Up — EventPass{% endblock %}
+{% block content %}
+<div class="page-narrow">
+  <div class="glass-card">
+    <div class="form-title">Create your account</div>
+    <div class="form-subtitle">Register for events and get instant QR passes.</div>
+
+    <form method="post">
+      {% csrf_token %}
+      <div style="display:flex; gap:12px;">
+        <div style="flex:1;">{{ form.first_name }}</div>
+        <div style="flex:1;">{{ form.last_name }}</div>
+      </div>
+      {{ form.username }}
+      {% if form.username.errors %}<div style="color:var(--danger); font-size:13px; margin:-10px 0 10px;">{{ form.username.errors|striptags }}</div>{% endif %}
+      {{ form.email }}
+      {{ form.phone_number }}
+      {{ form.password }}
+      {{ form.confirm_password }}
+      {% if form.non_field_errors %}<div style="color:var(--danger); font-size:13px; margin:-6px 0 10px;">{{ form.non_field_errors|striptags }}</div>{% endif %}
+      <button type="submit" class="btn btn-primary">Sign Up</button>
+    </form>
+    <div class="form-footer">
+      Already registered? <a href="{% url 'accounts:login' %}">Log in</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

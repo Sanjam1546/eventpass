@@ -1,0 +1,41 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}EventPass{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+  {% if user.is_authenticated %}
+  <nav class="navbar">
+    <a href="{% url 'passes:dashboard' %}" class="brand">Event<span>Pass</span></a>
+    <div class="nav-links">
+      <a href="{% url 'passes:event_list' %}">Events</a>
+      <a href="{% url 'passes:my_passes' %}">My Passes</a>
+      {% if user.profile.can_scan %}<a href="{% url 'passes:scanner' %}">Scanner</a>{% endif %}
+      {% if user.profile.can_manage_events %}<a href="{% url 'passes:event_create' %}">+ New Event</a>{% endif %}
+      <span class="pill">{{ user.first_name|default:user.username }}</span>
+      <a href="{% url 'accounts:logout' %}">Logout</a>
+    </div>
+  </nav>
+  {% endif %}
+
+  <div class="{% if not user.is_authenticated %}center-screen{% endif %}">
+    <div style="width:100%;">
+      {% if messages %}
+        <div class="container" style="margin-top:20px;">
+          <ul class="messages">
+            {% for message in messages %}
+              <li class="{{ message.tags }}">{{ message }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+      {% block content %}{% endblock %}
+    </div>
+  </div>
+</body>
+</html>

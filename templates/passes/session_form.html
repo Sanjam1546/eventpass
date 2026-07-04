@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block title %}Add Session — {{ event.title }}{% endblock %}
+{% block content %}
+<div class="page-narrow">
+  <div class="glass-card">
+    <div class="form-title">Add a Date &amp; Time</div>
+    <div class="form-subtitle">{{ event.title }} — attendees will pick from these slots.</div>
+    <form method="post">
+      {% csrf_token %}
+      <label>Date</label>
+      {{ form.date }}
+      <label>Start Time</label>
+      {{ form.start_time }}
+      <label>End Time (optional)</label>
+      {{ form.end_time }}
+      <label>Capacity</label>
+      {{ form.capacity }}
+      <div style="display:flex; gap:10px; margin-top:6px;">
+        <button type="submit" name="add_another" class="btn btn-outline">Save &amp; Add Another</button>
+        <button type="submit" class="btn btn-primary">Save &amp; Finish</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

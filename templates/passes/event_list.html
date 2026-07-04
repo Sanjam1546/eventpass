@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}Events — EventPass{% endblock %}
+{% block content %}
+<div class="page">
+  <h2 class="section-title">All Events</h2>
+  <div class="section-sub">Browse events and register for a pass.</div>
+
+  <div class="grid grid-2">
+    {% for event in events %}
+      <a href="{% url 'passes:event_detail' event.pk %}" style="text-decoration:none;">
+        <div class="glass-card event-card">
+          <h3>{{ event.title }}</h3>
+          <div class="meta">📍 {{ event.venue }}</div>
+          <div class="meta">{{ event.sessions.count }} date/time option(s)</div>
+        </div>
+      </a>
+    {% empty %}
+      <div class="empty-state">No events available right now.</div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

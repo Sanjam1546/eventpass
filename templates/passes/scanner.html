@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Scanner — EventPass{% endblock %}
+{% block extra_head %}
+<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+{% endblock %}
+{% block content %}
+<div class="page">
+  <h2 class="section-title">Entry Scanner</h2>
+  <div class="section-sub">Point the camera at an attendee's QR pass to check them in.</div>
+
+  <div class="scanner-wrap glass-card">
+    <div id="qr-reader"></div>
+    <div id="scan-result" class="idle">Point camera at a QR code...</div>
+  </div>
+</div>
+
+<script>
+  const SCAN_API_URL = "{% url 'passes:scan_api' %}";
+</script>
+<script src="{% static 'js/scanner.js' %}"></script>
+{% endblock %}

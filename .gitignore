@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+db.sqlite3
+media/qrcodes/*.png
+media/event_banners/*
+!media/qrcodes/.gitkeep
+!media/event_banners/.gitkeep
+venv/
+.env
+staticfiles/

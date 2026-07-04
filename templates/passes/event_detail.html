@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block title %}{{ event.title }} — EventPass{% endblock %}
+{% block content %}
+<div class="page">
+  <div class="glass-card" style="margin-bottom:24px;">
+    <h2 class="section-title" style="margin-bottom:8px;">{{ event.title }}</h2>
+    <div class="meta" style="color:var(--text-dim); margin-bottom:14px;">📍 {{ event.venue }}</div>
+    <p style="color:var(--text-main); line-height:1.6;">{{ event.description }}</p>
+    <a href="{% url 'passes:register_pass' event.pk %}" class="btn btn-primary" style="width:auto; margin-top:12px;">
+      Register for a Pass
+    </a>
+    {% if user.profile.can_manage_events %}
+      <a href="{% url 'passes:session_create' event.pk %}" class="btn btn-outline" style="width:auto; margin-top:12px; margin-left:10px;">
+        + Add Date/Time Session
+      </a>
+      <a href="{% url 'passes:member_list' event.pk %}" class="btn btn-outline" style="width:auto; margin-top:12px; margin-left:10px;">
+        👥 Manage Members
+      </a>
+    {% endif %}
+  </div>
+
+  <h3 class="section-title">Available Dates &amp; Times</h3>
+  <div class="grid grid-3">
+    {% for session in event.sessions.all %}
+      <div class="glass-card">
+        <div style="font-weight:600; font-size:16px;">{{ session.date|date:"d M Y" }}</div>
+        <div class="meta">{{ session.start_time|time:"h:i A" }}{% if session.end_time %} – {{ session.end_time|time:"h:i A" }}{% endif %}</div>
+        <div class="meta" style="margin-top:8px;">
+          {% if session.capacity > 0 %}
+            {{ session.seats_taken }} / {{ session.capacity }} seats booked
+          {% else %}
+            Unlimited seats
+          {% endif %}
+        </div>
+        {% if session.is_full %}<span class="badge badge-cancelled">Full</span>{% endif %}
+        {% if user.profile.can_manage_events %}
+          <div style="margin-top:10px;">
+            <a href="{% url 'passes:member_create' session.pk %}" class="btn btn-outline btn-sm" style="width:auto;">+ Add Member</a>
+          </div>
+        {% endif %}
+      </div>
+    {% empty %}
+      <div class="empty-state">No sessions scheduled yet for this event.</div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

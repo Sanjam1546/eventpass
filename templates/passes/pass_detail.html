@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block title %}{% if p.is_vip %}VIP Pass{% else %}Pass{% endif %} — {{ p.session.event.title }}{% endblock %}
+{% block content %}
+<div class="page">
+  <div class="glass-card ticket {% if p.is_vip %}ticket-vip{% endif %}">
+    <div style="display:flex; justify-content:center; gap:8px; margin-bottom:6px;">
+      {% if p.is_vip %}<span class="badge badge-vip">✨ VIP PASS</span>{% endif %}
+      {% if p.status == 'valid' %}<span class="badge badge-valid">Valid</span>
+      {% elif p.status == 'used' %}<span class="badge badge-used">Used</span>
+      {% else %}<span class="badge badge-cancelled">Cancelled</span>{% endif %}
+    </div>
+
+    <h2 style="margin:14px 0 4px;">{{ p.session.event.title }}</h2>
+    <div class="meta">📍 {{ p.session.event.venue }}</div>
+    <div class="meta">{{ p.session.date|date:"d M Y" }} · {{ p.session.start_time|time:"h:i A" }}</div>
+
+    <div class="qr-wrap">
+      {% if p.qr_image %}
+        <img src="{{ p.qr_image.url }}" alt="Pass QR Code">
+      {% endif %}
+    </div>
+
+    <div class="code">{{ p.pass_code }}</div>
+
+    <div style="text-align:left; margin-top:20px; border-top:1px solid var(--glass-border); padding-top:16px;">
+      <div class="meta"><strong style="color:var(--text-main);">Name:</strong> {{ p.display_name }}</div>
+      {% if p.member %}
+        <div class="meta"><strong style="color:var(--text-main);">Father's Name:</strong> {{ p.member.father_name }}</div>
+        <div class="meta"><strong style="color:var(--text-main);">Address:</strong> {{ p.member.address }}</div>
+        <div class="meta"><strong style="color:var(--text-main);">Phone:</strong> {{ p.member.phone_number }}</div>
+        {% if p.member.company_name %}
+          <div class="meta"><strong style="color:var(--text-main);">Company:</strong> {{ p.member.company_name }}</div>
+        {% endif %}
+      {% endif %}
+    </div>
+  </div>
+
+  <div style="text-align:center; margin-top:20px;">
+    {% if organizer_view %}
+      <a href="{% url 'passes:member_list' p.session.event_id %}" class="btn btn-outline" style="width:auto;">← Back to Members</a>
+    {% else %}
+      <a href="{% url 'passes:my_passes' %}" class="btn btn-outline" style="width:auto;">← Back to My Passes</a>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

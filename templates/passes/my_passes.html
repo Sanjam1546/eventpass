@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block title %}My Passes — EventPass{% endblock %}
+{% block content %}
+<div class="page">
+  <h2 class="section-title">My Passes</h2>
+  <div class="section-sub">Show the QR code at the venue entrance to check in.</div>
+
+  <div class="grid grid-3">
+    {% for p in passes %}
+      <a href="{% url 'passes:pass_detail' p.pk %}" style="text-decoration:none;">
+        <div class="glass-card">
+          <h3 style="margin:0 0 6px;">{{ p.session.event.title }}</h3>
+          <div class="meta">{{ p.session.date|date:"d M Y" }} · {{ p.session.start_time|time:"h:i A" }}</div>
+          <div class="meta">📍 {{ p.session.event.venue }}</div>
+          <div style="margin-top:10px;">
+            {% if p.status == 'valid' %}<span class="badge badge-valid">Valid</span>
+            {% elif p.status == 'used' %}<span class="badge badge-used">Used</span>
+            {% else %}<span class="badge badge-cancelled">Cancelled</span>{% endif %}
+          </div>
+        </div>
+      </a>
+    {% empty %}
+      <div class="empty-state">You haven't registered for any passes yet. <a href="{% url 'passes:event_list' %}">Browse events</a></div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

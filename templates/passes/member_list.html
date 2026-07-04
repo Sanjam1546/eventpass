@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block title %}Members — {{ event.title }}{% endblock %}
+{% block content %}
+<div class="page">
+  <h2 class="section-title">Members — {{ event.title }}</h2>
+  <div class="section-sub">All attendees added by organizers for this event.</div>
+
+  <div class="glass-card table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Father's Name</th>
+          <th>Phone</th>
+          <th>Company</th>
+          <th>Session</th>
+          <th>Pass Type</th>
+          <th>Status</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for m in members %}
+        <tr>
+          <td>{{ m.full_name }}</td>
+          <td>{{ m.father_name }}</td>
+          <td>{{ m.phone_number }}</td>
+          <td>{{ m.company_name|default:"—" }}</td>
+          <td>{{ m.session.date|date:"d M Y" }} · {{ m.session.start_time|time:"h:i A" }}</td>
+          <td>
+            {% if m.pass_type == 'vip' %}<span class="badge badge-vip">VIP</span>
+            {% else %}<span class="badge badge-general">General</span>{% endif %}
+          </td>
+          <td>
+            {% if m.event_pass.status == 'valid' %}<span class="badge badge-valid">Valid</span>
+            {% elif m.event_pass.status == 'used' %}<span class="badge badge-used">Used</span>
+            {% else %}<span class="badge badge-cancelled">Cancelled</span>{% endif %}
+          </td>
+          <td><a href="{% url 'passes:member_pass_detail' m.pk %}" class="btn btn-outline btn-sm" style="width:auto;">View Pass</a></td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="8" class="empty-state">No members added yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
